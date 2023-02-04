@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Weather App</title>
+  <link rel="stylesheet" href="style.css" /> 
+  
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> -->
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <h1 class="navbar-brand text-center">Weather Forcast</h1>
+      <h3><span id="time"> </span></h3>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="d-flex" role="search">
+          <input id="city" class="form-control me-2" type="search" placeholder="Enter location" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit" id="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <div class="container">
+    <h1 class="main-city text-center">Weather for <span id="cityName"></span></h1>
+    <main>
+      <div class="all-cards text-center">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header">
+              <h4 class="my-0 fw-normal">Humidity Info</h4>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Feels Like <span id="feels_like"></span> °C</li>
+                <li>Humidity is <span id="humidity"></span> %</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header">
+              <h4 class="my-0 fw-normal">Temperatures</h4>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Temperature is <span id="temp"></span> °C</li>
+                <li>Min Temperature is <span id="min_temp"></span> °C</li>
+                <li>Max Temperature is <span id="max_temp"></span> °C</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header">
+              <h4 class="my-0 fw-normal">Wind Info</h4>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Wind Degree is <span id="wind_degrees"> °</span></li>
+                <li>Windspeed is <span id="wind_speed"></span> km/hr</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="display-6 text-center mb-4">Weather of other common places</h2>
+
+      <div class="table-responsive">
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th style="width: 12%;"></th>
+              <th style="width: 12%;"> Temp (°C)</th>
+              <th style="width: 12%;"> Min Temp (°C)</th>
+              <th style="width: 12%;"> Max Temp (°C)</th>
+              <th style="width: 12%;"> Feels Like (°C)</th>
+              <th style="width: 12%;"> Humidity (%)</th>
+              <th style="width: 12%;"> Wind Degrees </th>
+              <th style="width: 12%;"> Wind Speed (km/hr)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="Delhi">
+              <th scope="row" class="text-start">Delhi</th>
+              <td id="TempDelhi">2</td>
+              <td id="MinTempDelhi">3</td>
+              <td id="MaxTempDelhi">4</td>
+              <td id="FeelsLikeDelhi">5</td>
+              <td id="HumidityDelhi">3</td>
+              <td id="WindDegreesDelhi">4</td>
+              <td id="WindSpeedDelhi">5</td>
+            </tr>
+            <tr id="Mumbai">
+              <th scope="row" class="text-start">Mumbai</th>
+              <td id="TempMumbai">2</td>
+              <td id="MinTempMumbai">3</td>
+              <td id="MaxTempMumbai">4</td>
+              <td id="FeelsLikeMumbai">5</td>
+              <td id="HumidityMumbai">3</td>
+              <td id="WindDegreesMumbai">4</td>
+              <td id="WindSpeedMumbai">5</td>
+            </tr>
+
+            <tr id="Kolkata">
+              <th scope="row" class="text-start">Kolkata</th>
+              <td id="TempKolkata">2</td>
+              <td id="MinTempKolkata">3</td>
+              <td id="MaxTempKolkata">4</td>
+              <td id="FeelsLikeKolkata">5</td>
+              <td id="HumidityKolkata">3</td>
+              <td id="WindDegreesKolkata">4</td>
+              <td id="WindSpeedKolkata">5</td>
+            </tr>
+
+            <tr id="chennai">
+              <th scope="row" class="text-start">Chennai</th>
+              <td id="TempChennai">2</td>
+              <td id="MinTempChennai">3</td>
+              <td id="MaxTempChennai">4</td>
+              <td id="FeelsLikeChennai">5</td>
+              <td id="HumidityChennai">3</td>
+              <td id="WindDegreesChennai">4</td>
+              <td id="WindSpeedChennai">5</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
