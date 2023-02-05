@@ -21,12 +21,8 @@ def moreInfo(city):
     top.configure(bg="#57adff")
     top.resizable(False,False)
 
-    #now = datetime.now()
-    #clock = Label(top,text=now.strftime("%Y-%m-%d"),font=("Helvetica",20),fg="black",bg="#57adff")
-    #clock.place(x=10,y=10)
-
-    timezone = Label(top,font=("Helvetica",20),fg="white",bg="#57adff")
-    timezone.place(x=700,y=10)
+    timezone = Label(top,font=("Helvetica",20),fg="black",bg="#57adff")
+    timezone.place(x=30,y=10)
 
     geolocator= Nominatim(user_agent="geopiExercises")
     location = geolocator.geocode(city)
@@ -34,7 +30,7 @@ def moreInfo(city):
     result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
     timezone.config(text=result)
         
-    api = "https://api.openweathermap.org/data/2.5/forecast?lat="+str(location.latitude)+"&lon="+str(location.longitude)+"&units=metric&appid=f778015abc2d6cecf62baa9b62848035"
+    api = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&units=metric&appid=f778015abc2d6cecf62baa9b62848035"
     json_data = requests.get(api).json()
 
     #boxes
@@ -377,114 +373,111 @@ def moreInfo(city):
     ds1h.place(x=802,y=410)
     dds1h = json_data['list'][7]['weather'][0]['description']
     ds1h.config(text=(dds1h))
-    
 ####################################################################################################################################################################################
-
 def getWeather():
     city=textfield.get()
 
-    geolocator= Nominatim(user_agent="geopiExercises")
-    location = geolocator.geocode(city)
-    obj = TimezoneFinder()
-
-    result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
-
-    timezone.config(text=result)
-    long_lat.config(text=f"{round(location.latitude,4)}°N,{round(location.longitude,4)}°E")
-
-    home = pytz.timezone(result)
-    local_time = datetime.now(home)
-    current_time = local_time.strftime("%I:%M %p")
-    clock.config(text=current_time)
-
     ##weather
-    api = "https://api.openweathermap.org/data/2.5/forecast?lat="+str(location.latitude)+"&lon="+str(location.longitude)+"&units=metric&appid=f778015abc2d6cecf62baa9b62848035"
+    api = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&units=metric&appid=f778015abc2d6cecf62baa9b62848035"
     json_data = requests.get(api).json()
 
-    #current
-    temp = json_data['list'][0]['main']['temp']
-    humidity = json_data['list'][0]['main']['humidity']
-    pressure = json_data['list'][0]['main']['pressure']
-    wind = json_data['list'][0]['wind']['speed']
-    description = json_data['list'][0]['weather'][0]['description']
+    if(json_data["message"] != "city not found") :
+        geolocator= Nominatim(user_agent="geopiExercises")
+        location = geolocator.geocode(city)
+        obj = TimezoneFinder()
+        result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
+        timezone.config(text=result)
+        long_lat.config(text=f"{round(location.latitude,4)}°N,{round(location.longitude,4)}°E")
+        home = pytz.timezone(result)
+        local_time = datetime.now(home)
+        current_time = local_time.strftime("%I:%M %p")
+        clock.config(text=current_time)
 
-    t.config(text=(temp,"°C"))
-    h.config(text=(humidity,"%"))
-    p.config(text=(pressure,"hPa"))
-    w.config(text=(wind,"m/s"))
-    d.config(text=description)
+        #current
+        temp = json_data['list'][0]['main']['temp']    
+        humidity = json_data['list'][0]['main']['humidity']
+        pressure = json_data['list'][0]['main']['pressure']
+        wind = json_data['list'][0]['wind']['speed']
+        description = json_data['list'][0]['weather'][0]['description']
 
-    #first cell
-    firstdayimage = json_data['list'][0]['weather'][0]['icon']
-    photo1 = ImageTk.PhotoImage(file=f"icon/{firstdayimage}@2x.png")
-    firstimage.config(image=photo1)
-    firstimage.image=photo1
-    tempday1 = json_data['list'][0]['main']['temp_max']
-    tempnight1 = json_data['list'][0]['main']['temp_min']
-    day1temp.config(text=f"Max : {tempday1} °C\nMin : {tempnight1} °C")    
-    
-    #second cell
-    seconddayimage = json_data['list'][8]['weather'][0]['icon']
-    img = (Image.open(f"icon/{seconddayimage}@2x.png"))
-    resized_image = img.resize((50,50))
-    photo2 = ImageTk.PhotoImage(resized_image)
-    secondimage.config(image=photo2)
-    secondimage.image = photo2
-    tempday2 = json_data['list'][8]['main']['temp_max']
-    tempnight2 = json_data['list'][8]['main']['temp_min']
-    day2temp.config(text=f"Max : {tempday2} °C\nMin : {tempnight2} °C")
-   
-    #third cell
-    thirddayimage = json_data['list'][16]['weather'][0]['icon']
-    img = (Image.open(f"icon/{thirddayimage}@2x.png"))
-    resized_image = img.resize((50,50))
-    photo3 = ImageTk.PhotoImage(resized_image)
-    thirdimage.config(image=photo3)
-    thirdimage.image = photo3
-    tempday3 = json_data['list'][16]['main']['temp_max']
-    tempnight3 = json_data['list'][16]['main']['temp_min']
-    day3temp.config(text=f"Max : {tempday3} °C\nMin : {tempnight3} °C")
-   
+        t.config(text=(temp,"°C"))
+        h.config(text=(humidity,"%"))
+        p.config(text=(pressure,"hPa"))
+        w.config(text=(wind,"m/s"))
+        d.config(text=description)
 
-    #fourth cell
-    fourthdayimage = json_data['list'][24]['weather'][0]['icon']
-    img = (Image.open(f"icon/{fourthdayimage}@2x.png"))
-    resized_image = img.resize((50,50))
-    photo4 = ImageTk.PhotoImage(resized_image)
-    fourthimage.config(image=photo4)
-    fourthimage.image = photo4
-    tempday4 = json_data['list'][24]['main']['temp_max']
-    tempnight4 = json_data['list'][24]['main']['temp_min']
-    day4temp.config(text=f"Max : {tempday4} °C\nMin : {tempnight4} °C")
-    
-    #fifth cell
-    fifthdayimage = json_data['list'][32]['weather'][0]['icon']
-    img = (Image.open(f"icon/{fifthdayimage}@2x.png"))
-    resized_image = img.resize((50,50))
-    photo5 = ImageTk.PhotoImage(resized_image)
-    fifthimage.config(image=photo5)
-    fifthimage.image = photo5
-    tempday5 = json_data['list'][32]['main']['temp_max']
-    tempnight5 = json_data['list'][32]['main']['temp_min']
-    day5temp.config(text=f"Max : {tempday5} °C\nMin : {tempnight5} °C")
+        #first cell
+        firstdayimage = json_data['list'][0]['weather'][0]['icon']
+        photo1 = ImageTk.PhotoImage(file=f"icon/{firstdayimage}@2x.png")
+        firstimage.config(image=photo1)
+        firstimage.image=photo1
+        tempday1 = json_data['list'][0]['main']['temp_max']
+        tempnight1 = json_data['list'][0]['main']['temp_min']
+        day1temp.config(text=f"Max : {tempday1} °C\nMin : {tempnight1} °C")    
+        
+        #second cell
+        seconddayimage = json_data['list'][8]['weather'][0]['icon']
+        img = (Image.open(f"icon/{seconddayimage}@2x.png"))
+        resized_image = img.resize((50,50))
+        photo2 = ImageTk.PhotoImage(resized_image)
+        secondimage.config(image=photo2)
+        secondimage.image = photo2
+        tempday2 = json_data['list'][8]['main']['temp_max']
+        tempnight2 = json_data['list'][8]['main']['temp_min']
+        day2temp.config(text=f"Max : {tempday2} °C\nMin : {tempnight2} °C")
+       
+        #third cell
+        thirddayimage = json_data['list'][16]['weather'][0]['icon']
+        img = (Image.open(f"icon/{thirddayimage}@2x.png"))
+        resized_image = img.resize((50,50))
+        photo3 = ImageTk.PhotoImage(resized_image)
+        thirdimage.config(image=photo3)
+        thirdimage.image = photo3
+        tempday3 = json_data['list'][16]['main']['temp_max']
+        tempnight3 = json_data['list'][16]['main']['temp_min']
+        day3temp.config(text=f"Max : {tempday3} °C\nMin : {tempnight3} °C")
+       
 
-    #days
-    first = datetime.now()
-    day1.config(text=first.strftime("%A"))
-    second = first+timedelta(days=1)
-    day2.config(text=second.strftime("%A"))
-    third = first+timedelta(days=2)
-    day3.config(text=third.strftime("%A"))
-    fourth = first+timedelta(days=3)
-    day4.config(text=fourth.strftime("%A"))
-    fifth = first+timedelta(days=4)
-    day5.config(text=fifth.strftime("%A"))
+        #fourth cell
+        fourthdayimage = json_data['list'][24]['weather'][0]['icon']
+        img = (Image.open(f"icon/{fourthdayimage}@2x.png"))
+        resized_image = img.resize((50,50))
+        photo4 = ImageTk.PhotoImage(resized_image)
+        fourthimage.config(image=photo4)
+        fourthimage.image = photo4
+        tempday4 = json_data['list'][24]['main']['temp_max']
+        tempnight4 = json_data['list'][24]['main']['temp_min']
+        day4temp.config(text=f"Max : {tempday4} °C\nMin : {tempnight4} °C")
+        
+        #fifth cell
+        fifthdayimage = json_data['list'][32]['weather'][0]['icon']
+        img = (Image.open(f"icon/{fifthdayimage}@2x.png"))
+        resized_image = img.resize((50,50))
+        photo5 = ImageTk.PhotoImage(resized_image)
+        fifthimage.config(image=photo5)
+        fifthimage.image = photo5
+        tempday5 = json_data['list'][32]['main']['temp_max']
+        tempnight5 = json_data['list'][32]['main']['temp_min']
+        day5temp.config(text=f"Max : {tempday5} °C\nMin : {tempnight5} °C")
 
-    infobtn = Button(root,text = "Get Detailed Updates",font=('Helvetica',11),fg="white",bg="#203243",width=22,command = moreInfo(city))   #####################
-    infobtn.place(x=45,y=235)
+        #days
+        first = datetime.now()
+        day1.config(text=first.strftime("%A"))
+        second = first+timedelta(days=1)
+        day2.config(text=second.strftime("%A"))
+        third = first+timedelta(days=2)
+        day3.config(text=third.strftime("%A"))
+        fourth = first+timedelta(days=3)
+        day4.config(text=fourth.strftime("%A"))
+        fifth = first+timedelta(days=4)
+        day5.config(text=fifth.strftime("%A"))
 
+        infobtn = tk.Button(root,text = "Get Detailed Updates",font=('Helvetica',11),fg="white",bg="#203243",width=22,command=lambda: moreInfo(city))   #####################
+        infobtn.place(x=45,y=235)
+
+    else :
+        messagebox.showerror("Invalid","Invalid location!!")
 ###########################################################################################################################################################################
-
 ##icon
 image_icon = PhotoImage(file="Images/logo.png")
 root.iconphoto(False,image_icon)
