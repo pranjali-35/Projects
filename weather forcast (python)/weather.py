@@ -10,7 +10,7 @@ from PIL import Image, ImageTk
 
 root = Tk()
 root.title("Weather App")
-root.geometry("890x470+300+200")
+root.geometry("890x470")
 root.configure(bg="#57adff")
 root.resizable(False,False)
 
@@ -21,14 +21,19 @@ def moreInfo(city):
     top.configure(bg="#57adff")
     top.resizable(False,False)
 
-    timezone = Label(top,font=("Helvetica",20),fg="black",bg="#57adff")
+    c = Label(top,font=("Helvetica",30,'bold'),fg="white",bg="#57adff")
+    c.place(x=380,y=12)
+
+    c.config(text=city)
+
+    """timezone = Label(top,font=("Helvetica",20),fg="black",bg="#57adff")
     timezone.place(x=30,y=10)
 
     geolocator= Nominatim(user_agent="geopiExercises")
     location = geolocator.geocode(city)
     obj = TimezoneFinder()
     result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
-    timezone.config(text=result)
+    timezone.config(text=result)"""
         
     api = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&units=metric&appid=f778015abc2d6cecf62baa9b62848035"
     json_data = requests.get(api).json()
