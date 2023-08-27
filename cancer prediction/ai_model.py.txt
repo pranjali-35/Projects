@@ -1,0 +1,264 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# Load the dataset
+data = pd.read_csv('Cancer_Data.csv')
+
+# Split the dataset into features and labels
+X = data.drop('diagnosis', axis=1)
+y = data['diagnosis']
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+X_train.dropna(axis=1,inplace=True)
+X_test.dropna(axis=1,inplace=True)
+
+# Train a Random Forest Classifier
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+window = tk.Tk()
+window.title("Cancer Diagnosis")
+window.geometry("1200x800")
+
+frame1=Frame(window,width=300,height=740).place(x=10, y=10)
+frame2=Frame(window,bg = "white",width=865,height=740).place(x=325, y=10)
+
+# Create a function to make predictions
+def predict():
+    # Read input values from UI
+    radius_mean = radius_mean_entry.get()
+    texture_mean = texture_mean_entry.get()
+    perimeter_mean = perimeter_mean_entry.get()
+    area_mean = area_mean_entry.get()
+    smoothness_mean = smoothness_mean_entry.get()
+    compactness_mean = compactness_mean_entry.get()
+    concavity_mean = concavity_mean_entry.get()
+    concave_points_mean = concave_points_mean_entry.get()
+    symmetry_mean = symmetry_mean_entry.get()
+    fractal_dimension_mean = fractal_dimension_mean_entry.get()
+    radius_se = radius_se_entry.get()
+    texture_se = texture_se_entry.get()
+    perimeter_se = perimeter_se_entry.get()
+    area_se = area_se_entry.get()
+    smoothness_se = smoothness_se_entry.get()
+    compactness_se = compactness_se_entry.get()
+    concavity_se = concavity_se_entry.get()
+    concave_points_se = concave_points_se_entry.get()
+    symmetry_se = symmetry_se_entry.get()
+    fractal_dimension_se = fractal_dimension_se_entry.get()
+    radius_worst = radius_worst_entry.get()
+    texture_worst = texture_worst_entry.get()
+    perimeter_worst = perimeter_worst_entry.get()
+    area_worst = area_worst_entry.get()
+    smoothness_worst = smoothness_worst_entry.get()
+    compactness_worst = compactness_worst_entry.get()
+    concavity_worst = concavity_worst_entry.get()
+    concave_points_worst = concave_points_worst_entry.get()
+    symmetry_worst = symmetry_worst_entry.get()
+    fractal_dimension_worst = fractal_dimension_worst_entry.get()
+
+    if not radius_mean.strip() or not texture_mean.strip() or not perimeter_mean.strip() or not area_mean.strip() or not smoothness_mean.strip() or not \
+        compactness_mean.strip() or not concavity_mean.strip() or not concave_points_mean.strip() or not symmetry_mean.strip() or not fractal_dimension_mean.strip() \
+        or not radius_se.strip() or not texture_se.strip() or not perimeter_se.strip() or not area_se.strip() or not smoothness_se.strip() or not \
+        compactness_se.strip() or not concavity_se.strip() or not concave_points_se.strip() or not symmetry_se.strip() or not fractal_dimension_se.strip() \
+        or not radius_worst.strip() or not texture_worst.strip() or not perimeter_worst.strip() or not area_worst.strip() or not smoothness_worst.strip() \
+        or not compactness_worst.strip() or not concavity_worst.strip() or not concave_points_worst.strip() or not symmetry_worst.strip() or not  \
+        fractal_dimension_worst.strip():
+        messagebox.showerror("Error", "Please fill in all the values.")
+        return
+     try:
+        radius_mean = float(radius_mean)
+        texture_mean = float(texture_mean)
+        perimeter_mean = float(perimeter_mean)
+        area_mean = float(area_mean)
+        smoothness_mean = float(smoothness_mean)
+        compactness_mean = float(compactness_mean)
+        concavity_mean = float(concavity_mean)
+        concave_points_mean = float(concave_points_mean)
+        symmetry_mean = float(symmetry_mean)
+        fractal_dimension_mean = float(fractal_dimension_mean)
+        radius_se = float(radius_se)
+        texture_se = float(texture_se)
+        perimeter_se = float(perimeter_se)
+        area_se = float(area_se)
+        smoothness_se = float(smoothness_se)
+        compactness_se = float(compactness_se)
+        concavity_se = float(concavity_se)
+        concave_points_se = float(concave_points_se)
+        symmetry_se = float(symmetry_se)
+        fractal_dimension_se = float(fractal_dimension_se)
+        radius_worst = float(radius_worst)
+        texture_worst = float(texture_worst)
+        perimeter_worst = float(perimeter_worst)
+        smoothness_worst = float(smoothness_worst)
+        compactness_worst = float(compactness_worst)
+        concavity_worst = float(concavity_worst)
+        concave_points_worst = float(concave_points_worst)
+        symmetry_worst = float(symmetry_worst)
+        fractal_dimension_worst = float(fractal_dimension_worst)
+    except ValueError:
+        messagebox.showerror("Error","Please enter valid numeric values")
+        return
+    # Make a prediction using the trained model
+    input_data = [[radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean, compactness_mean, concavity_mean, concave_points_mean, symmetry_mean, fractal_dimension_mean, radius_se, texture_se, perimeter_se, area_se, smoothness_se, compactness_se, concavity_se, concave_points_se, symmetry_se, fractal_dimension_se, radius_worst, texture_worst, perimeter_worst, area_worst, smoothness_worst, compactness_worst, concavity_worst, concave_points_worst, symmetry_worst, fractal_dimension_worst]] 
+    prediction = model.predict(input_data)[0]
+
+    # Display the prediction
+    prediction_label.config(text=f"Prediction: {prediction}", font=("Helvetica",20))
+
+
+########## FRAME 1 #######################
+description = tk.Label(frame1, text="Prediction Results", font=("Helvetica",22)).place(x=70, y=20)
+tk.Label(frame1, text="B:benign - ", font=("Helvetica",18)).place(x=15,y=80)
+tk.Label(frame1, text="- It is a non-cancerous tumour").place(x=20,y=120)
+tk.Label(frame1, text="- Stops growth after reaching a certain size").place(x=20,y=140)
+tk.Label(frame1, text="- Causes very less damage").place(x=20,y=160)
+tk.Label(frame1, text="M:malignant - ", font=("Helvetica",18)).place(x=15, y=220)
+tk.Label(frame1, text="- It is a cancerous tumour").place(x=20,y=260)
+tk.Label(frame1, text="- Shows indefinite growth").place(x=20,y=280)
+tk.Label(frame1, text="- Causes fatal damage to the body").place(x=20,y=300)
+
+########### FRAME 2 ######################
+
+########## COLUMN 1 #####################
+radius_mean_label = tk.Label(frame2, text="Radius Mean:", bg="white").place(x=330, y=18)
+radius_mean_entry = tk.Entry(frame2)
+radius_mean_entry.place(x=490, y=15)
+
+texture_mean_label = tk.Label(frame2, text="Texture Mean:", bg="white").place(x=330, y=63)
+texture_mean_entry = tk.Entry(frame2)
+texture_mean_entry.place(x=490, y=60)
+
+perimeter_mean_label = tk.Label(frame2, text="Perimeter Mean:", bg="white").place(x=330, y=108)
+perimeter_mean_entry = tk.Entry(frame2)
+perimeter_mean_entry.place(x=490, y=105)
+
+area_mean_label = tk.Label(frame2, text="Area Mean:", bg="white").place(x=330, y=153)
+area_mean_entry = tk.Entry(frame2)
+area_mean_entry.place(x=490, y=150)
+
+smoothness_mean_label = tk.Label(frame2, text="Smoothness Mean:", bg="white").place(x=330, y=198)
+smoothness_mean_entry = tk.Entry(frame2)
+smoothness_mean_entry.place(x=490, y=195)
+
+compactness_mean_label = tk.Label(frame2, text="Compactness Mean:", bg="white").place(x=330, y=243)
+compactness_mean_entry = tk.Entry(frame2)
+compactness_mean_entry.place(x=490, y=240)
+
+concavity_mean_label = tk.Label(frame2, text="Concavity Mean:", bg="white").place(x=330, y=288)
+concavity_mean_entry = tk.Entry(frame2)
+concavity_mean_entry.place(x=490, y=285)
+
+concave_points_mean_label = tk.Label(frame2, text="Concave Points Mean:", bg="white").place(x=330, y=333)
+concave_points_mean_entry = tk.Entry(frame2)
+concave_points_mean_entry.place(x=490, y=330)
+
+symmetry_mean_label = tk.Label(frame2, text="Symmetry Mean:", bg="white").place(x=330, y=378)
+symmetry_mean_entry = tk.Entry(frame2)
+symmetry_mean_entry.place(x=490, y=375)
+
+fractal_dimension_mean_label = tk.Label(frame2, text="Fractal Dimension Mean:", bg="white").place(x=330, y=423)
+fractal_dimension_mean_entry = tk.Entry(frame2)
+fractal_dimension_mean_entry.place(x=490, y=420)
+
+radius_se_label = tk.Label(frame2, text="Radius Se:", bg="white").place(x=330, y=468)
+radius_se_entry = tk.Entry(frame2)
+radius_se_entry.place(x=490, y=465)
+
+texture_se_label = tk.Label(frame2, text="Texture Se:", bg="white").place(x=330, y=513)
+texture_se_entry = tk.Entry(frame2)
+texture_se_entry.place(x=490, y=510)
+
+perimeter_se_label = tk.Label(frame2, text="Perimeter Se:", bg="white").place(x=330, y=558)
+perimeter_se_entry = tk.Entry(frame2)
+perimeter_se_entry.place(x=490, y=555)
+
+area_se_label = tk.Label(frame2, text="Area Se:", bg="white").place(x=330, y=603)
+area_se_entry = tk.Entry(frame2)
+area_se_entry.place(x=490, y=600)
+
+smoothness_se_label = tk.Label(frame2, text="Smoothness Se:", bg="white").place(x=330, y=648)
+smoothness_se_entry = tk.Entry(frame2)
+smoothness_se_entry.place(x=490, y=645)
+
+############ COLUMN 2 ################
+compactness_se_label = tk.Label(frame2, text="Compactness Se:", bg="white").place(x=710, y=18)
+compactness_se_entry = tk.Entry(frame2)
+compactness_se_entry.place(x=870, y=15)
+
+concavity_se_label = tk.Label(frame2, text="Concavity Se:", bg="white").place(x=710, y=63)
+concavity_se_entry = tk.Entry(frame2)
+concavity_se_entry.place(x=870, y=60)
+
+concave_points_se_label = tk.Label(frame2, text="Concave Points Se:", bg="white").place(x=710, y=108)
+concave_points_se_entry = tk.Entry(frame2)
+concave_points_se_entry.place(x=870, y=105)
+
+symmetry_se_label = tk.Label(frame2, text="Symmetry Se:", bg="white").place(x=710, y=153)
+symmetry_se_entry = tk.Entry(frame2)
+symmetry_se_entry.place(x=870, y=150)
+
+fractal_dimension_se_label = tk.Label(frame2, text="Fractal Dimension Se:", bg="white").place(x=710, y=198)
+fractal_dimension_se_entry = tk.Entry(frame2)
+fractal_dimension_se_entry.place(x=870, y=195)
+
+radius_worst_label = tk.Label(frame2, text="Radius Worst:", bg="white").place(x=710, y=243)
+radius_worst_entry = tk.Entry(frame2)
+radius_worst_entry.place(x=870, y=240)
+
+texture_worst_label = tk.Label(frame2, text="Texture Worst:", bg="white").place(x=710, y=288)
+texture_worst_entry = tk.Entry(frame2)
+texture_worst_entry.place(x=870, y=285)
+
+perimeter_worst_label = tk.Label(frame2, text="Perimeter Worst:", bg="white").place(x=710, y=333)
+perimeter_worst_entry = tk.Entry(frame2)
+perimeter_worst_entry.place(x=870, y=330)
+
+area_worst_label = tk.Label(frame2, text="Area Worst:", bg="white").place(x=710, y=378)
+area_worst_entry = tk.Entry(frame2)
+area_worst_entry.place(x=870, y=375)
+
+smoothness_worst_label = tk.Label(frame2, text="Smoothness Worst:", bg="white").place(x=710, y=423)
+smoothness_worst_entry = tk.Entry(frame2)
+smoothness_worst_entry.place(x=870, y=420)
+
+compactness_worst_label = tk.Label(frame2, text="Compactness Worst:", bg="white").place(x=710, y=468)
+compactness_worst_entry = tk.Entry(frame2)
+compactness_worst_entry.place(x=870, y=465)
+
+concavity_worst_label = tk.Label(frame2, text="Concavity Worst:", bg="white").place(x=710, y=513)
+concavity_worst_entry = tk.Entry(frame2)
+concavity_worst_entry.place(x=870, y=510)
+
+concave_points_worst_label = tk.Label(frame2, text="Concave Points Worst:", bg="white").place(x=710, y=558)
+concave_points_worst_entry = tk.Entry(frame2)
+concave_points_worst_entry.place(x=870, y=555)
+
+
+symmetry_worst_label = tk.Label(frame2, text="Symmetry Worst:", bg="white").place(x=710, y=603)
+symmetry_worst_entry = tk.Entry(frame2)
+symmetry_worst_entry.place(x=870, y=600)
+
+fractal_dimension_worst_label = tk.Label(frame2, text="Fractal Dimension Worst:", bg="white").place(x=710, y=648)
+fractal_dimension_worst_entry = tk.Entry(frame2)
+fractal_dimension_worst_entry.place(x=870, y=645)
+
+########### PREDICT BUTTON #############
+
+predict_button = tk.Button(frame2, text="Predict", command=predict)
+predict_button.place(x=600, y=700)
+predict_button.config(font=("Helvetica",20))
+prediction_label = tk.Label(frame2, bg="white")
+prediction_label.place(x=780, y=702)
+
+window.mainloop()
+
+
+    
+    
